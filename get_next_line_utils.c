@@ -5,12 +5,66 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ichettri <ichettri@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/30 19:34:14 by ichettri          #+#    #+#             */
-/*   Updated: 2024/01/04 17:05:34 by ichettri         ###   ########.fr       */
+/*   Created: 2024/01/05 12:40:22 by ichettri          #+#    #+#             */
+/*   Updated: 2024/01/08 16:40:01 by ichettri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void	cpy_it(char *ptr, char *str, int i, int j)
+{
+	i = 0;
+	j++;
+	while (str[j])
+		ptr[i++] = str[j++];
+	ptr[i] = '\0';
+	free(str);
+}
+
+void	*all_if(char *tmp, char *buf, char *str, char *temp)
+{
+	tmp = str;
+	if (!tmp)
+	{
+		tmp = malloc(sizeof(char) * 1);
+		tmp[0] = '\0';
+	}
+	temp = ft_strjoin(tmp, buf);
+	free(tmp);
+	if (!temp)
+	{
+		free(str);
+		return (NULL);
+	}
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	int		len;
+	char	*str1;
+	char	*str2;
+	char	*ptr;
+
+	str1 = (char *)s1;
+	str2 = (char *)s2;
+	if (!s1 || !s2)
+		return (NULL);
+	len = ft_strlen(str1) + ft_strlen(str2);
+	ptr = malloc(sizeof(char) * len + 1);
+	if (ptr == NULL)
+		return (NULL);
+	while (*str1)
+	{
+		*ptr++ = *str1++;
+	}
+	while (*str2)
+	{
+		*ptr++ = *str2++;
+	}
+	*ptr = '\0';
+	return ((char *)ptr - len);
+}
 
 size_t	ft_strlen(const char *str)
 {
@@ -22,82 +76,4 @@ size_t	ft_strlen(const char *str)
 		i++;
 	}
 	return (i);
-}
-
-void    ft_strcpy(char *dest, char *src)
-{
-    int i;
-
-    i = 0;
-    while(src[i] != '\0')
-    {
-        dest[i] = src[i];
-        i++;
-    }
-    dest[i] = '\0';
-}
-
-char	*ft_strchr(char *s, int c)
-{
-	while (*s)
-	{
-		if (*s == (char)c)
-			return (s);
-		s++;
-	}
-	if (*s == (char)c)
-		return (s);
-	return (NULL);
-}
-
-static void	condition(char *st1, char *st2, int n)
-{
-	int	i;
-
-	i = 0;
-	while (i < n)
-	{
-		st1[i] = st2[i];
-		i++;
-	}
-}
-
-void	*ft_memmove(void *str1, const void *str2, int n)
-{
-	char	*st1;
-	char	*st2;
-	int		i;
-
-	st1 = (char *)str1;
-	st2 = (char *)str2;
-	i = 0;
-	if (st1 == NULL && st2 == NULL)
-		return (NULL);
-	if (st1 < st2)
-	{
-		condition(st1, st2, n);
-	}
-	else
-	{
-		while (n > 0)
-		{
-			st1[n - 1] = st2[n - 1];
-			n--;
-		}
-	}
-	return (str1);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	size_t	i;
-	char	*p;
-
-	p = s;
-	i = 0;
-	while (i < n)
-	{
-		p[i] = '\0';
-		i++;
-	}
 }

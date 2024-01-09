@@ -5,95 +5,138 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ichettri <ichettri@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/28 18:46:52 by ichettri          #+#    #+#             */
-/*   Updated: 2024/01/04 17:46:41 by ichettri         ###   ########.fr       */
+/*   Created: 2024/01/05 12:37:10 by ichettri          #+#    #+#             */
+/*   Updated: 2024/01/08 16:40:33 by ichettri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
 #include "get_next_line.h"
+#include <fcntl.h>
 #include <stdlib.h>
 
-t_fd *get_fd(t_fd **list, int fd)
+char	*ft_before(char *str)
 {
-    t_fd *tmp;
+	int		i;
+	char	*ptr;
 
-    if (*list == NULL) {
-        *list = (t_fd *)malloc(sizeof(t_fd));
-        (*list)->fd = fd;
-        (*list)->buffer = (char *)malloc(BUFFER_SIZE + 1);
-        (*list)->start = 0;
-        (*list)->end = 0;
-        (*list)->next = NULL;
-        return *list;
-    }
-
-    tmp = *list;
-    while (tmp) {
-        if (tmp->fd == fd) {
-            return tmp;
-        }
-        tmp = tmp->next;
-    }
-
-    tmp = (t_fd *)malloc(sizeof(t_fd));
-    tmp->fd = fd;
-    tmp->buffer = (char *)malloc(BUFFER_SIZE + 1);
-    tmp->start = 0;
-    tmp->end = 0;
-    tmp->next = *list;
-    *list = tmp;
-
-    return tmp;
+	i = 0;
+	if (!str)
+		return (NULL);
+	while (str[i] != '\n' && str[i])
+		i++;
+	if (str[0] == '\0')
+	{
+		return (NULL);
+	}
+	ptr = malloc(sizeof(char) * i + 2);
+	if (!ptr)
+		return (NULL);
+	i = 0;
+	while (str[i] != '\n' && str[i])
+	{
+		ptr[i] = str[i];
+		i++;
+	}
+	if (str[i] == '\n')
+		ptr[i++] = '\n';
+	ptr[i] = '\0';
+	return (ptr);
 }
 
-char *get_next_line(int fd) {
-    static t_fd *list;
-    t_fd *current_fd = get_fd(&list, fd);
-    char *line = NULL;
-    int line_length = 0;
-
-    while (1) {
-        if (current_fd->start >= current_fd->end) {
-            current_fd->end = read(fd, current_fd->buffer, BUFFER_SIZE);
-            current_fd->start = 0;
-        }
-
-        if (current_fd->end == 0) {
-            return line;
-        }
-
-        line = (char *)realloc(line, line_length + 2);
-        if (line == NULL) {
-            return NULL;
-        }
-
-        line[line_length] = current_fd->buffer[current_fd->start];
-        line[line_length + 1] = '\0';
-        line_length++;
-        current_fd->start++;
-
-        if (current_fd->buffer[current_fd->start - 1] == '\n' || current_fd->end == 0) {
-            break;
-        }
-    }
-
-    return line;
-}
-
-int main(void)
+char	*ft_after(char *str)
 {
-    int fd;
-    char *line;
+	int		i;
+	int		j;
+	char	*ptr;
 
-    fd = open("file.txt", O_RDONLY);
-    while ((line = get_next_line(fd)))
-    {
-        printf("%s", line);
-        free(line);
-    }
-    return (0);
+	j = 0;
+	i = ft_strlen(str);
+	if (!str)
+		return (NULL);
+	while (str[j] != '\n' && str[j])
+		j++;
+	if (str[j] == '\0')
+	{
+		free(str);
+		return (NULL);
+	}
+	ptr = malloc(sizeof(char) * (i - j));
+	if (!ptr)
+	{
+		free(str);
+		return (NULL);
+	}
+	cpy_it(ptr, str, i, j);
+	return (ptr);
 }
 
+int	ft_newline(char *str)
+{
+	if (!str)
+		return (0);
+	while (*str)
+	{
+		if (*str == '\n')
+			return (1);
+		str++;
+	}
+	return (0);
+}
+
+char	*ft_read(int fd, char *buf, char *tmp, char *str)
+{
+	int		i;
+	char	*temp;
+
+	i = 1;
+	while (i != 0)
+	{
+		i = read(fd, buf, BUFFER_SIZE);
+		if (i == -1)
+		{
+			free(buf);
+			free(str);
+			return (NULL);
+		}
+		buf[i] = '\0';
+		tmp = str;
+		if (!tmp)
+		{
+			tmp = malloc(sizeof(char) * 1);
+			tmp[0] = '\0';
+		}
+		temp = ft_strjoin(tmp, buf);
+		free(tmp);
+		if (!temp)
+		{
+			free(str);
+			return (NULL);
+		}
+		str = temp;
+		if (ft_newline(str) == 1)
+			break ;
+	}
+	free(buf);
+	return (str);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*str;
+	char		*buf;
+	char		*line;
+	char		*tmp;
+
+	tmp = NULL;
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	buf = malloc(BUFFER_SIZE + 1);
+	if (!buf)
+		return (NULL);
+	str = ft_read(fd, buf, tmp, str);
+	if (!str)
+		return (NULL);
+	line = ft_before(str);
+	str = ft_after(str);
+	return (line);
+}
