@@ -12,3 +12,7 @@ Supports multiple file reads simultaneously.
 Handles error conditions gracefully.
 Adheres to the standards of the C programming language.
 Overall, the get_next_line project is a valuable exercise for students learning C programming. It teaches them how to handle file I/O and how to write efficient and memory-safe code.
+
+RUN THE CODE :
+
+To run the program use the main funtion from the TEST_IT folder and also the check.txt file. Later on you can use your own file and main function to play with the function.
