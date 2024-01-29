@@ -6,7 +6,7 @@
 /*   By: ichettri <ichettri@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:40:22 by ichettri          #+#    #+#             */
-/*   Updated: 2024/01/08 16:40:01 by ichettri         ###   ########.fr       */
+/*   Updated: 2024/01/10 12:43:45 by ichettri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,12 @@ void	cpy_it(char *ptr, char *str, int i, int j)
 	free(str);
 }
 
-void	*all_if(char *tmp, char *buf, char *str, char *temp)
+char	*all_if(int i, char *buf, char *str, char *tmp)
 {
+	char	*temp;
+
+	temp = NULL;
+	buf[i] = '\0';
 	tmp = str;
 	if (!tmp)
 	{
@@ -32,11 +36,7 @@ void	*all_if(char *tmp, char *buf, char *str, char *temp)
 	}
 	temp = ft_strjoin(tmp, buf);
 	free(tmp);
-	if (!temp)
-	{
-		free(str);
-		return (NULL);
-	}
+	return (temp);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)

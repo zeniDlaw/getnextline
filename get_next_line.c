@@ -6,13 +6,15 @@
 /*   By: ichettri <ichettri@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:37:10 by ichettri          #+#    #+#             */
-/*   Updated: 2024/01/08 16:40:33 by ichettri         ###   ########.fr       */
+/*   Updated: 2024/01/15 11:59:56 by ichettri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <fcntl.h>
 #include <stdlib.h>
+
+// #include <stdio.h>
 
 char	*ft_before(char *str)
 {
@@ -98,15 +100,7 @@ char	*ft_read(int fd, char *buf, char *tmp, char *str)
 			free(str);
 			return (NULL);
 		}
-		buf[i] = '\0';
-		tmp = str;
-		if (!tmp)
-		{
-			tmp = malloc(sizeof(char) * 1);
-			tmp[0] = '\0';
-		}
-		temp = ft_strjoin(tmp, buf);
-		free(tmp);
+		temp = all_if(i, buf, str, tmp);
 		if (!temp)
 		{
 			free(str);
@@ -140,3 +134,19 @@ char	*get_next_line(int fd)
 	str = ft_after(str);
 	return (line);
 }
+
+// int main(void)
+// {
+// 	int fd;
+// 	char *line;
+
+// 	fd = open("check.txt", O_RDONLY);
+// 	while ((line = get_next_line(fd)))
+// 	{
+// 		printf("%s\n", line);
+// 		free(line);
+// 	}
+// 	free(line);
+// 	close(fd);
+// 	return (0);
+// }

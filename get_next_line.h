@@ -6,7 +6,7 @@
 /*   By: ichettri <ichettri@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:14:06 by ichettri          #+#    #+#             */
-/*   Updated: 2024/01/08 16:39:36 by ichettri         ###   ########.fr       */
+/*   Updated: 2024/01/10 12:44:07 by ichettri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,6 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *str);
 void	cpy_it(char *ptr, char *str, int i, int j);
-void	*all_if(char *tmp, char *buf, char *str, char *temp);
+char	*all_if(int i, char *buf, char *str, char *tmp);
 
 #endif
